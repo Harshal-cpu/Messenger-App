@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: messenger-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+  server:
+    build: ./server
+    container_name: messenger-server
+    restart: unless-stopped
+    ports:
+      - '5000:5000'
+    env_file:
+      - ./server/.env
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/messenger-app
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
