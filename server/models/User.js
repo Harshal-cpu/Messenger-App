@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       url: {
         type: String,
-        default: 'https://res.cloudinary.com/demo/image/upload/v1/default-avatar.png',
+        default: 'https://api.dicebear.com/7.x/initials/svg?seed=User',
       },
       publicId: { type: String, default: null },
     },
