@@ -28,10 +28,16 @@ const app = express();
 // Security headers
 app.use(helmet());
 
-// CORS — only allow the configured client origin, with credentials for cookies
+// CORS — allow the configured client origin(s) with credentials for cookies.
+// CLIENT_URL may be a single origin or a comma-separated list of origins.
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: allowedOrigins,
     credentials: true,
   })
 );

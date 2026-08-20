@@ -32,7 +32,17 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.startsWith('/api/')) return; // never cache API responses
 
   event.respondWith(
-    caches.match(request).then((cached) => cached || fetch(request).catch(() => cached))
+    caches.match(request).then((cached) => {
+      if (cached) return cached;
+      return fetch(request).catch(
+        () =>
+          new Response('Offline', {
+            status: 503,
+            statusText: 'Offline',
+            headers: { 'Content-Type': 'text/plain' },
+          })
+      );
+    })
   );
 });
 
